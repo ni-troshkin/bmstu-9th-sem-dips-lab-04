@@ -100,8 +100,8 @@ jobs:
           echo "password=$RATING_PG_PASSWORD" >> $DB_HELM_VALUES_PATH
           echo "port=8080" > $SERVICE_HELM_VALUES_PATH
           echo "version=$APP_VERSION" >> $SERVICE_HELM_VALUES_PATH
-          kubectl apply -f ./.kube/db-data/
-          kubectl apply -f ./.kube/ingress.yaml
+          kubectl apply -f ./.kube/db-data/ --validate=false
+          kubectl apply -f ./.kube/ingress.yaml --validate=false
           helm install rating .kube/db_helm
           helm install library .kube/db_helm
           helm install reservations .kube/db_helm
