@@ -90,10 +90,6 @@ jobs:
         run: |
           pwd
           curl -sSL https://hub.mcs.mail.ru/repository/client-keystone-auth/latest/linux/client-install.sh | bash
-          sed -e 's/!PASSWORD!/$RATING_PG_PASSWORD/' ./.kube/kubernetes-cluster-5056_kubeconfig.yaml > ./.kube/tmp.yaml
-          rm -rf ./.kube/kubernetes-cluster-5056_kubeconfig.yaml
-          mv ./.kube/tmp.yaml ./.kube/kubernetes-cluster-5056_kubeconfig.yaml
-          export KUBECONFIG=./.kube/kubernetes-cluster-5056_kubeconfig.yaml
           echo "dbPort=5432" > $DB_HELM_VALUES_PATH
           echo "version=$APP_VERSION" >> $DB_HELM_VALUES_PATH
           echo "password=$RATING_PG_PASSWORD" >> $DB_HELM_VALUES_PATH
@@ -103,6 +99,10 @@ jobs:
       
       - name: Deploy to k8s 2
         run: |
+          sed -e 's/!PASSWORD!/$RATING_PG_PASSWORD/' ./.kube/kubernetes-cluster-5056_kubeconfig.yaml > ./.kube/tmp.yaml
+          rm -rf ./.kube/kubernetes-cluster-5056_kubeconfig.yaml
+          mv ./.kube/tmp.yaml ./.kube/kubernetes-cluster-5056_kubeconfig.yaml
+          export KUBECONFIG=./.kube/kubernetes-cluster-5056_kubeconfig.yaml
           kubectl apply -f ./.kube/db-data/ --validate=false
           kubectl apply -f ./.kube/ingress.yaml --validate=false
           helm install rating .kube/db_helm
