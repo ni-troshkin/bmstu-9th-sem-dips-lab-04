@@ -49,42 +49,42 @@ jobs:
           fetch-depth: 0
 
       - uses: docker/setup-buildx-action@v2
-      - name: Build and Publish Server
-        run: |
-          echo "APP_VERSION=$APP_VERSION" >> .env
-          echo "RATING_PG_USER=$RATING_PG_USER" >> .env
-          echo "RATING_PG_PASSWORD=$RATING_PG_PASSWORD" >> .env
-          rm -rf $RATING_DB_PROPERTIES_PATH
-          echo "db.url=jdbc:postgresql://rating-db:5432/ratingservice" >> $RATING_DB_PROPERTIES_PATH
-          echo "db.username=$RATING_PG_USER" >> $RATING_DB_PROPERTIES_PATH
-          echo "db.password=$RATING_PG_PASSWORD" >> $RATING_DB_PROPERTIES_PATH
-          echo "LIBRARY_PG_USER=$LIBRARY_PG_USER" >> .env
-          echo "LIBRARY_PG_PASSWORD=$LIBRARY_PG_PASSWORD" >> .env
-          rm -rf $LIBRARY_DB_PROPERTIES_PATH
-          echo "db.url=jdbc:postgresql://library-db:5432/libraryservice" >> $LIBRARY_DB_PROPERTIES_PATH
-          echo "db.username=$LIBRARY_PG_USER" >> $LIBRARY_DB_PROPERTIES_PATH
-          echo "db.password=$LIBRARY_PG_PASSWORD" >> $LIBRARY_DB_PROPERTIES_PATH
-          echo "RESERVATIONS_PG_USER=$RESERVATIONS_PG_USER" >> .env
-          echo "RESERVATIONS_PG_PASSWORD=$RESERVATIONS_PG_PASSWORD" >> .env
-          rm -rf $RESERVATIONS_DB_PROPERTIES_PATH
-          echo "db.url=jdbc:postgresql://reservation-db:5432/reservationsservice" >> $RESERVATIONS_DB_PROPERTIES_PATH
-          echo "db.username=$RESERVATIONS_PG_USER" >> $RESERVATIONS_DB_PROPERTIES_PATH
-          echo "db.password=$RESERVATIONS_PG_PASSWORD" >> $RESERVATIONS_DB_PROPERTIES_PATH
-          echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
-          docker build --quiet -t $RATING_IMAGE_NAME:$APP_VERSION ./app/server/services/rating/RatingService
-          docker build --quiet -t $LIBRARY_IMAGE_NAME:$APP_VERSION ./app/server/services/library/LibraryService
-          docker build --quiet -t $RESERVATIONS_IMAGE_NAME:$APP_VERSION ./app/server/services/reservations/ReservationService
-          docker build --quiet -t $GATEWAY_IMAGE_NAME:$APP_VERSION ./app/server/services/gateway/GatewayService
-          docker push $RATING_IMAGE_NAME:$APP_VERSION
-          docker push $LIBRARY_IMAGE_NAME:$APP_VERSION
-          docker push $RESERVATIONS_IMAGE_NAME:$APP_VERSION
-          docker push $GATEWAY_IMAGE_NAME:$APP_VERSION
-          docker build --quiet -t $RATING_DB_IMAGE_NAME:$APP_VERSION ./app/server/services/rating/sql
-          docker build --quiet -t $LIBRARY_DB_IMAGE_NAME:$APP_VERSION ./app/server/services/library/sql
-          docker build --quiet -t $RESERVATIONS_DB_IMAGE_NAME:$APP_VERSION ./app/server/services/reservations/sql
-          docker push $RATING_DB_IMAGE_NAME:$APP_VERSION
-          docker push $LIBRARY_DB_IMAGE_NAME:$APP_VERSION
-          docker push $RESERVATIONS_DB_IMAGE_NAME:$APP_VERSION
+      #- name: Build and Publish Server
+      #  run: |
+      #    echo "APP_VERSION=$APP_VERSION" >> .env
+      #    echo "RATING_PG_USER=$RATING_PG_USER" >> .env
+      #    echo "RATING_PG_PASSWORD=$RATING_PG_PASSWORD" >> .env
+      #    rm -rf $RATING_DB_PROPERTIES_PATH
+      #    echo "db.url=jdbc:postgresql://rating-db:5432/ratingservice" >> $RATING_DB_PROPERTIES_PATH
+      #    echo "db.username=$RATING_PG_USER" >> $RATING_DB_PROPERTIES_PATH
+      #    echo "db.password=$RATING_PG_PASSWORD" >> $RATING_DB_PROPERTIES_PATH
+      #    echo "LIBRARY_PG_USER=$LIBRARY_PG_USER" >> .env
+      #    echo "LIBRARY_PG_PASSWORD=$LIBRARY_PG_PASSWORD" >> .env
+      #    rm -rf $LIBRARY_DB_PROPERTIES_PATH
+      #    echo "db.url=jdbc:postgresql://library-db:5432/libraryservice" >> $LIBRARY_DB_PROPERTIES_PATH
+      #    echo "db.username=$LIBRARY_PG_USER" >> $LIBRARY_DB_PROPERTIES_PATH
+      #    echo "db.password=$LIBRARY_PG_PASSWORD" >> $LIBRARY_DB_PROPERTIES_PATH
+      #    echo "RESERVATIONS_PG_USER=$RESERVATIONS_PG_USER" >> .env
+      #    echo "RESERVATIONS_PG_PASSWORD=$RESERVATIONS_PG_PASSWORD" >> .env
+      #    rm -rf $RESERVATIONS_DB_PROPERTIES_PATH
+      #    echo "db.url=jdbc:postgresql://reservation-db:5432/reservationsservice" >> $RESERVATIONS_DB_PROPERTIES_PATH
+      #    echo "db.username=$RESERVATIONS_PG_USER" >> $RESERVATIONS_DB_PROPERTIES_PATH
+      #    echo "db.password=$RESERVATIONS_PG_PASSWORD" >> $RESERVATIONS_DB_PROPERTIES_PATH
+      #    echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
+      #    docker build --quiet -t $RATING_IMAGE_NAME:$APP_VERSION ./app/server/services/rating/RatingService
+      #    docker build --quiet -t $LIBRARY_IMAGE_NAME:$APP_VERSION ./app/server/services/library/LibraryService
+      #    docker build --quiet -t $RESERVATIONS_IMAGE_NAME:$APP_VERSION ./app/server/services/reservations/ReservationService
+      #    docker build --quiet -t $GATEWAY_IMAGE_NAME:$APP_VERSION ./app/server/services/gateway/GatewayService
+      #    docker push $RATING_IMAGE_NAME:$APP_VERSION
+      #    docker push $LIBRARY_IMAGE_NAME:$APP_VERSION
+      #    docker push $RESERVATIONS_IMAGE_NAME:$APP_VERSION
+      #    docker push $GATEWAY_IMAGE_NAME:$APP_VERSION
+      #    docker build --quiet -t $RATING_DB_IMAGE_NAME:$APP_VERSION ./app/server/services/rating/sql
+      #    docker build --quiet -t $LIBRARY_DB_IMAGE_NAME:$APP_VERSION ./app/server/services/library/sql
+      #    docker build --quiet -t $RESERVATIONS_DB_IMAGE_NAME:$APP_VERSION ./app/server/services/reservations/sql
+      #    docker push $RATING_DB_IMAGE_NAME:$APP_VERSION
+      #    docker push $LIBRARY_DB_IMAGE_NAME:$APP_VERSION
+      #    docker push $RESERVATIONS_DB_IMAGE_NAME:$APP_VERSION
 
       - name: Deploy to k8s 1
         run: |
