@@ -86,11 +86,10 @@ jobs:
           docker push $LIBRARY_DB_IMAGE_NAME:$APP_VERSION
           docker push $RESERVATIONS_DB_IMAGE_NAME:$APP_VERSION
 
-      - name: Deploy to k8s
+      - name: Deploy to k8s 1
         run: |
           pwd
           curl -sSL https://hub.mcs.mail.ru/repository/client-keystone-auth/latest/linux/client-install.sh | bash
-          exec -l $SHELL
           sed -e 's/!PASSWORD!/$RATING_PG_PASSWORD/' ./.kube/kubernetes-cluster-5056_kubeconfig.yaml > ./.kube/tmp.yaml
           rm -rf ./.kube/kubernetes-cluster-5056_kubeconfig.yaml
           mv ./.kube/tmp.yaml ./.kube/kubernetes-cluster-5056_kubeconfig.yaml
@@ -100,6 +99,9 @@ jobs:
           echo "password=$RATING_PG_PASSWORD" >> $DB_HELM_VALUES_PATH
           echo "port=8080" > $SERVICE_HELM_VALUES_PATH
           echo "version=$APP_VERSION" >> $SERVICE_HELM_VALUES_PATH
+          exec -l $SHELL
+      
+      - name: Deploy to k8s 2
           kubectl apply -f ./.kube/db-data/ --validate=false
           kubectl apply -f ./.kube/ingress.yaml --validate=false
           helm install rating .kube/db_helm
