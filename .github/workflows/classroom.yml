@@ -102,6 +102,7 @@ jobs:
           exec -l $SHELL
       
       - name: Deploy to k8s 2
+        run: |
           kubectl apply -f ./.kube/db-data/ --validate=false
           kubectl apply -f ./.kube/ingress.yaml --validate=false
           helm install rating .kube/db_helm
