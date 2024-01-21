@@ -89,6 +89,8 @@ jobs:
       - name: Deploy to k8s
         run: |
           pwd
+          curl -sSL https://hub.mcs.mail.ru/repository/client-keystone-auth/latest/linux/client-install.sh | bash
+          source "/home/runner/.bashrc"
           sed -e 's/!PASSWORD!/$RATING_PG_PASSWORD/' ./.kube/kubernetes-cluster-5056_kubeconfig.yaml > ./.kube/tmp.yaml
           rm -rf ./.kube/kubernetes-cluster-5056_kubeconfig.yaml
           mv ./.kube/tmp.yaml ./.kube/kubernetes-cluster-5056_kubeconfig.yaml
